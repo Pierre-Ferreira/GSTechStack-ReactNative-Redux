@@ -1,7 +1,8 @@
-export default (selectedItem = '', action) => {
-  if (action.type === 'update_selected_item') {
-    selectedItem = action.payload;
-    return selectedItem;
+export default (state = null, action) => {
+  switch (action.type) {
+    case 'update_selected_item':
+      return action.payload;
+    default:
+      return state;
   }
-  return selectedItem;
 };

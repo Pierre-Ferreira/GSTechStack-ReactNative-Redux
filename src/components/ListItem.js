@@ -1,20 +1,28 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
-import { CardSection } from './common';
+import {
+  Text,
+  View,
+  TouchableWithoutFeedback,
+  LayoutAnimation
+} from 'react-native';
 import { connect } from 'react-redux';
+import { CardSection } from './common';
+import * as actions from '../actions';
 
 
 class ListItem extends Component {
+  componentWillUpdate() {
+    LayoutAnimation.spring();
+  }
   titleClick() {
-console.log(this.props)
-    if (this.props.library.id === this.props.selectedItem) {
-      this.props.dispatch({ type: 'update_selected_item', payload: '' });
+    if (this.props.library.id === this.props.selectedLibraryId) {
+      this.props.selectedLibrary(null);
     } else {
-      this.props.dispatch({ type: 'update_selected_item', payload: this.props.library.id });
+      this.props.selectedLibrary(this.props.library.id);
     }
   }
-  showDescription(id) {
-    if (id === this.props.selectedItem) {
+  showDescription() {
+    if (this.props.expanded) {
       return (
         <CardSection>
           <Text style={styles.descStyle}>
@@ -26,31 +34,35 @@ console.log(this.props)
   }
   render() {
     return (
-      <View>
-        <CardSection onPressFn={this.titleClick.bind(this)}>
-          <Text style={styles.titleStyle}>
-            {this.props.library.title}
-          </Text>
-        </CardSection>
-        {this.showDescription(this.props.library.id)}
-      </View>
+      <TouchableWithoutFeedback onPress={this.titleClick.bind(this)}>
+        <View>
+          <CardSection>
+            <Text style={styles.titleStyle}>
+              {this.props.library.title}
+            </Text>
+          </CardSection>
+          {this.showDescription()}
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }
 
 const styles = {
   titleStyle: {
-    fontSize: 18,
+    fontSize: 58,
     paddingLeft: 15
   },
   descStyle: {
-    fontSize: 14,
+    fontSize: 24,
     paddingLeft: 25
   }
 };
 
-const MapStateToProps = (state) => {
-  return ({ selectedItem: state.selectedItem });
+const MapStateToProps = (state, ownProps) => {
+  const expanded = state.selectedLibraryId === ownProps.library.id;
+  return ({ selectedLibraryId: state.selectedLibraryId, expanded });
 };
 
-export default connect(MapStateToProps)(ListItem);
+
+export default connect(MapStateToProps, actions)(ListItem);
