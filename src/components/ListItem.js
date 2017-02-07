@@ -27,11 +27,8 @@ console.log(this.props)
   render() {
     return (
       <View>
-        <CardSection>
-          <Text
-            style={styles.titleStyle}
-            onPress={this.titleClick.bind(this)}
-          >
+        <CardSection onPressFn={this.titleClick.bind(this)}>
+          <Text style={styles.titleStyle}>
             {this.props.library.title}
           </Text>
         </CardSection>

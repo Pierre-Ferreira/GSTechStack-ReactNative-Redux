@@ -1,11 +1,11 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 
 const CardSection = (props) => {
   return (
-    <View style={styles.containerStyles}>
+    <TouchableOpacity style={styles.containerStyles} onPress={props.onPressFn}>
       {props.children}
-    </View>
+    </TouchableOpacity>
   );
 };
 
